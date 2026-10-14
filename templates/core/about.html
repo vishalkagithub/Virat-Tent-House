@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us | {{ brand.business_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-dark text-white text-center"
+    style="background: linear-gradient(135deg, #18090d 0%, #290d16 100%);">
+    <div class="container py-4">
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2">Our Legacy</span>
+        <h1 class="display-5 fw-bold brand-font">About {{ brand.business_name }}</h1>
+        <p class="lead text-secondary mx-auto" style="max-width: 650px;">
+            Crafting magnificent wedding pavilions and temporary event infrastructures across Ambedkar Nagar(UP) for
+            more than 15 years.
+        </p>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <span class="badge badge-vth-maroon px-3 py-2 rounded-pill mb-2">Our Heritage</span>
+                <h2 class="fw-bold brand-font mb-4">From Traditional Shamianas to Modern German Hangars</h2>
+                <p class="text-muted">
+                    Founded in Kurki Bazar, Akbarpur, <strong>{{ brand.business_name }}</strong> began with a clear
+                    purpose: to take the stress out of event planning by providing majestic, sturdy, and breathtaking
+                    temporary infrastructure.
+                </p>
+                <p class="text-muted">
+                    Over the years, we have grown from a modest neighborhood tent provider into Ambedkar Nagar's most
+                    preferred luxury event setup enterprise. We possess Ambedkar Nagar's premier in-house inventory of
+                    fire-retardant waterproof German Hangars, authentic carved wooden and fiber mandaps, imported
+                    chandeliers, heavy-duty stage trussing, and silent generators.
+                </p>
+                <p class="text-muted">
+                    We believe that a wedding or ceremony is once in a lifetime, and there is zero margin for delays or
+                    errors. Our 100% on-time guarantee and dedicated on-site crew ensure your celebration shines without
+                    a hitch.
+                </p>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="p-4 bg-light rounded-4 text-center border">
+                            <i class="bi bi-calendar2-heart text-danger fs-1 mb-2"></i>
+                            <h3 class="fw-bold mb-0">2,500+</h3>
+                            <small class="text-muted">Successful Events</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-4 bg-light rounded-4 text-center border">
+                            <i class="bi bi-people text-warning fs-1 mb-2"></i>
+                            <h3 class="fw-bold mb-0">50+</h3>
+                            <small class="text-muted">Experienced Crew</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-4 bg-light rounded-4 text-center border">
+                            <i class="bi bi-truck text-primary fs-1 mb-2"></i>
+                            <h3 class="fw-bold mb-0">12</h3>
+                            <small class="text-muted">Transport Vehicles</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-4 bg-light rounded-4 text-center border">
+                            <i class="bi bi-building-check text-success fs-1 mb-2"></i>
+                            <h3 class="fw-bold mb-0">25,000+</h3>
+                            <small class="text-muted">Sq Ft Warehouse</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values Section -->
+<section class="py-5" style="background-color: var(--vth-cream);">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold brand-font">Our Guiding Principles</h2>
+            <p class="text-muted">Why hundreds of families trust us year after year</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="vth-card p-4 h-100 bg-white">
+                    <div class="icon-box-maroon"><i class="bi bi-clock-history"></i></div>
+                    <h5 class="fw-bold mb-2">100% On-Time Setup</h5>
+                    <p class="text-muted small mb-0">We deliver and complete full venue decoration hours before your
+                        ceremony begins, allowing you to welcome guests with peace of mind.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="vth-card p-4 h-100 bg-white">
+                    <div class="icon-box-gold"><i class="bi bi-check-all"></i></div>
+                    <h5 class="fw-bold mb-2">Immaculate Cleanliness</h5>
+                    <p class="text-muted small mb-0">Every chair cover, table drape, carpet, and sofa is meticulously
+                        steam-cleaned, inspected, and maintained in our central godown.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="vth-card p-4 h-100 bg-white">
+                    <div class="icon-box-maroon"><i class="bi bi-currency-rupee"></i></div>
+                    <h5 class="fw-bold mb-2">Transparent Quotations</h5>
+                    <p class="text-muted small mb-0">Clear itemized quotation PDFs with no hidden costs, unexpected
+                        surcharges, or last-minute surprise billing.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

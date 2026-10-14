@@ -1,0 +1,328 @@
+/* Virat Tent House - Custom Design System */
+:root {
+  --vth-primary: #8a1424; /* Regal Royal Maroon */
+  --vth-primary-dark: #630c18;
+  --vth-primary-light: #ab2337;
+  --vth-gold: #cfa83b; /* Festive Warm Gold */
+  --vth-gold-dark: #a98522;
+  --vth-gold-light: #f4e3b2;
+  --vth-dark: #121826; /* Deep Midnight */
+  --vth-dark-alt: #1e2638;
+  --vth-light: #fbf9f5; /* Warm Ivory Canvas */
+  --vth-cream: #f4efe6;
+  --vth-text-dark: #1f2937;
+  --vth-text-muted: #6b7280;
+  --vth-border: #e5e7eb;
+  --vth-card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  --vth-glow-gold: 0 0 20px rgba(207, 168, 59, 0.35);
+}
+
+body {
+  font-family: 'Outfit', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--vth-text-dark);
+  background-color: var(--vth-light);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .brand-font {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+/* Nav & Header */
+.vth-navbar {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(207, 168, 59, 0.25);
+  transition: all 0.3s ease;
+}
+
+.navbar-brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--vth-primary);
+  text-decoration: none;
+  font-size: 1.35rem;
+}
+
+.navbar-brand-logo i {
+  color: var(--vth-gold);
+}
+
+.nav-link {
+  font-weight: 500;
+  color: var(--vth-text-dark);
+  padding: 0.5rem 0.9rem !important;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--vth-primary) !important;
+}
+
+/* Custom Buttons */
+.btn-vth-gold {
+  background: linear-gradient(135deg, #d8b247 0%, #b89124 100%);
+  color: #121826;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 14px rgba(207, 168, 59, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-vth-gold:hover {
+  background: linear-gradient(135deg, #e3c059 0%, #a4801c 100%);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(207, 168, 59, 0.45);
+}
+
+.btn-vth-maroon {
+  background: linear-gradient(135deg, var(--vth-primary) 0%, var(--vth-primary-dark) 100%);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 14px rgba(138, 20, 36, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-vth-maroon:hover {
+  background: linear-gradient(135deg, var(--vth-primary-light) 0%, var(--vth-primary) 100%);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(138, 20, 36, 0.45);
+}
+
+/* Hero Section */
+.hero-section {
+  position: relative;
+  background: radial-gradient(circle at top right, rgba(207, 168, 59, 0.15), transparent 45%),
+              linear-gradient(135deg, #18090d 0%, #290d16 50%, #150912 100%);
+  color: #ffffff;
+  padding: 100px 0 80px;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle, rgba(207, 168, 59, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 50px;
+  background: rgba(207, 168, 59, 0.18);
+  border: 1px solid rgba(207, 168, 59, 0.4);
+  color: var(--vth-gold-light);
+  font-size: 0.88rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.hero-title span {
+  color: var(--vth-gold);
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: #e2e8f0;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Luxury Cards */
+.vth-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: var(--vth-card-shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  overflow: hidden;
+}
+
+.vth-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px -8px rgba(0, 0, 0, 0.1);
+  border-color: rgba(207, 168, 59, 0.4);
+}
+
+.vth-card-header-accent {
+  border-top: 4px solid var(--vth-gold);
+}
+
+.badge-vth-gold {
+  background-color: var(--vth-gold-light);
+  color: var(--vth-gold-dark);
+  font-weight: 600;
+}
+
+.badge-vth-maroon {
+  background-color: #fce7eb;
+  color: var(--vth-primary);
+  font-weight: 600;
+}
+
+/* Feature Icon Boxes */
+.icon-box-gold {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  background: rgba(207, 168, 59, 0.12);
+  color: var(--vth-gold-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.icon-box-maroon {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  background: rgba(138, 20, 36, 0.1);
+  color: var(--vth-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+/* Floating WhatsApp Button */
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: #25d366;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 32px;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.08);
+  color: white;
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.55);
+}
+
+/* Admin Dashboard Specific */
+.admin-sidebar {
+  background-color: #111827;
+  color: #9ca3af;
+  min-height: calc(100vh - 65px);
+  border-right: 1px solid #1f2937;
+}
+
+.admin-sidebar .nav-link {
+  color: #d1d5db !important;
+  border-radius: 8px;
+  padding: 0.65rem 1rem !important;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.92rem;
+}
+
+.admin-sidebar .nav-link i {
+  font-size: 1.15rem;
+  width: 24px;
+  color: #9ca3af;
+}
+
+.admin-sidebar .nav-link:hover,
+.admin-sidebar .nav-link.active {
+  background-color: rgba(207, 168, 59, 0.15);
+  color: var(--vth-gold-light) !important;
+}
+
+.admin-sidebar .nav-link:hover i,
+.admin-sidebar .nav-link.active i {
+  color: var(--vth-gold);
+}
+
+.admin-kpi-card {
+  border-radius: 12px;
+  background: white;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-kpi-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--vth-gold);
+}
+
+.admin-kpi-card.kpi-maroon::after { background: var(--vth-primary); }
+.admin-kpi-card.kpi-success::after { background: #10b981; }
+.admin-kpi-card.kpi-info::after { background: #0ea5e9; }
+.admin-kpi-card.kpi-warning::after { background: #f59e0b; }
+
+/* Timeline & Statuses */
+.status-pill {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 30px;
+  text-transform: capitalize;
+}
+
+/* Footer */
+.vth-footer {
+  background-color: #12090e;
+  color: #9ca3af;
+  border-top: 3px solid var(--vth-gold);
+}
+
+.vth-footer h5 {
+  color: #f3f4f6;
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+}
+
+.vth-footer a {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.vth-footer a:hover {
+  color: var(--vth-gold);
+}

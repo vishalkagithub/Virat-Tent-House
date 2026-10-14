@@ -1,0 +1,389 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | {{ brand.business_name }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center text-lg-start">
+    <div class="container position-relative">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="hero-badge">
+                    <i class="bi bi-award-fill text-warning"></i> Premier Event Infrastructure in Rajasthan
+                </div>
+                <h1 class="hero-title">
+                    Royal Weddings &amp; <span>Grand Celebrations</span> Crafted to Perfection
+                </h1>
+                <p class="hero-subtitle">
+                    Transforming grounds into majestic palace setups. Specializing in luxury German Hangar tents, royal
+                    mandap decoration, thematic lighting, shamianas, and complete event infrastructure.
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start pt-2">
+                    <a href="{% url 'bookings:enquiry_create' %}"
+                        class="btn btn-vth-gold btn-lg px-4 py-3 rounded-pill">
+                        <i class="bi bi-calendar2-heart me-2"></i> Book Your Event
+                    </a>
+                    <a href="https://wa.me/{{ brand.whatsapp_number }}?text=Hello%20Virat%20Tent%20House,%20I%20would%20like%20to%20get%20a%20free%20quote%20for%20my%20event."
+                        target="_blank" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill">
+                        <i class="bi bi-whatsapp text-success me-2"></i> Chat on WhatsApp
+                    </a>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="row g-3 mt-4 pt-3 border-top border-secondary border-opacity-50 text-start">
+                    <div class="col-4">
+                        <div class="fw-bold fs-4 text-warning">15+</div>
+                        <div class="small text-secondary">Years of Trust</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="fw-bold fs-4 text-warning">2,500+</div>
+                        <div class="small text-secondary">Events Delivered</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="fw-bold fs-4 text-warning">100%</div>
+                        <div class="small text-secondary">On-Time Guarantee</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <!-- Quick Quote Card -->
+                <div class="vth-card p-4 shadow-lg text-start bg-white text-dark">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="icon-box-gold mb-0" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                            <i class="bi bi-calculator"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold">Instant Event Enquiry</h5>
+                            <small class="text-muted">Get quote within 2 hours</small>
+                        </div>
+                    </div>
+
+                    <form action="{% url 'bookings:enquiry_create' %}" method="get">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Event Type</label>
+                            <select name="event_type" class="form-select">
+                                <option value="wedding">Royal Wedding</option>
+                                <option value="reception">Wedding Reception</option>
+                                <option value="haldi">Haldi &amp; Mehndi Ceremony</option>
+                                <option value="sangeet">Sangeet Night &amp; DJ</option>
+                                <option value="religious">Religious Katha / Pandal</option>
+                                <option value="corporate">Corporate Exhibition</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Tent &amp; Setup Requirement</label>
+                            <input type="text" class="form-control"
+                                placeholder="e.g. 500 Guests, Waterproof German Hangar" readonly
+                                value="All-Inclusive Infrastructure Package">
+                        </div>
+                        <button type="submit" class="btn btn-vth-maroon w-100 py-2 rounded-pill fw-semibold">
+                            Continue Enquiry <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <small class="text-muted"><i class="bi bi-shield-check text-success me-1"></i> Transparent
+                            Pricing &bull; No Hidden Charges</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Services Section -->
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <span class="badge badge-vth-maroon px-3 py-2 rounded-pill mb-2">Our Capabilities</span>
+            <h2 class="fw-bold brand-font">Signature Services &amp; Infrastructure</h2>
+            <p class="text-muted mx-auto" style="max-width: 650px;">
+                From waterproof German Hangars to bespoke floral Mandaps, we maintain Rajasthan's largest in-house
+                inventory of temporary event structures.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            {% for service in featured_services %}
+            <div class="col-lg-4 col-md-6">
+                <div class="vth-card h-100 d-flex flex-column p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="icon-box-gold">
+                            <i class="bi {{ service.category.icon|default:'bi-gem' }}"></i>
+                        </div>
+                        <span class="badge badge-vth-gold">{{ service.price_display }}</span>
+                    </div>
+                    <h5 class="fw-bold mb-2">{{ service.name }}</h5>
+                    <p class="text-muted small flex-grow-1 mb-4">{{ service.description|truncatewords:20 }}</p>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'services:service_detail' service.slug %}"
+                            class="btn btn-outline-dark btn-sm rounded-pill flex-grow-1">
+                            Explore Details
+                        </a>
+                        <a href="{% url 'bookings:enquiry_create' %}"
+                            class="btn btn-vth-maroon btn-sm rounded-pill px-3">
+                            Enquire
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-4">
+                <p class="text-muted">Services will appear once demo data is loaded.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'services:service_list' %}" class="btn btn-outline-dark px-4 py-2 rounded-pill fw-semibold">
+                View All Event Services <i class="bi bi-chevron-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Packages Section -->
+<section class="py-5" style="background-color: var(--vth-cream);">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <span class="badge badge-vth-gold px-3 py-2 rounded-pill mb-2">Curated Experiences</span>
+            <h2 class="fw-bold brand-font">All-Inclusive Wedding &amp; Event Packages</h2>
+            <p class="text-muted mx-auto" style="max-width: 650px;">
+                Complete packages tailored to provide seamless luxury setup without the hassle of coordinating with
+                multiple vendors.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            {% for package in packages %}
+            <div class="col-lg-3 col-md-6">
+                <div class="vth-card h-100 d-flex flex-column bg-white p-4 vth-card-header-accent">
+                    <div class="mb-3">
+                        <span class="badge bg-dark text-warning small mb-2">Popular Choice</span>
+                        <h5 class="fw-bold mb-1">{{ package.name }}</h5>
+                        <div class="text-danger fw-bold fs-4 mt-2">
+                            ₹{{ package.starting_price|floatformat:0 }}
+                            <span class="text-muted fw-normal small">/ starting</span>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-3">{{ package.description|truncatewords:18 }}</p>
+
+                    <ul class="list-unstyled small mb-4 flex-grow-1">
+                        {% for item in package.items.all|slice:":4" %}
+                        <li class="mb-2 d-flex align-items-center gap-2">
+                            <i class="bi bi-check2-circle text-success"></i>
+                            <span>{{ item.service.name }}</span>
+                        </li>
+                        {% empty %}
+                        <li class="mb-2 text-muted"><i class="bi bi-check2-circle text-success me-2"></i>Tent &amp;
+                            Shamiana Setup</li>
+                        <li class="mb-2 text-muted"><i class="bi bi-check2-circle text-success me-2"></i>Carved Mandap /
+                            Stage</li>
+                        <li class="mb-2 text-muted"><i class="bi bi-check2-circle text-success me-2"></i>Banquet Seating
+                            &amp; Sofas</li>
+                        <li class="mb-2 text-muted"><i class="bi bi-check2-circle text-success me-2"></i>Chandelier
+                            &amp; Halogen Lighting</li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'services:package_detail' package.slug %}"
+                            class="btn btn-vth-gold btn-sm rounded-pill fw-semibold">
+                            View Package Inclusions
+                        </a>
+                        <a href="{% url 'bookings:enquiry_create' %}"
+                            class="btn btn-outline-secondary btn-sm rounded-pill">
+                            Request Custom Quote
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-4">
+                <p class="text-muted">Packages will be displayed shortly.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="badge badge-vth-maroon px-3 py-2 rounded-pill mb-3">Why Virat Tent House</span>
+                <h2 class="fw-bold brand-font mb-4">Uncompromising Quality &amp; Flawless Execution</h2>
+                <p class="text-muted mb-4">
+                    With over a decade of excellence in the tent and event decoration industry, we take pride in
+                    handling events of every scale. Our seasoned crew guarantees that your venue looks spectacular
+                    before the first guest arrives.
+                </p>
+
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="icon-box-gold flex-shrink-0" style="width: 46px; height: 46px; font-size: 1.3rem;">
+                            <i class="bi bi-shield-shaded"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">100% Weatherproof German Hangars</h6>
+                            <p class="text-muted small mb-0">Heavy duty aluminum trussing and rainproof fire-retardant
+                                fabric suitable for any weather condition.</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="icon-box-gold flex-shrink-0" style="width: 46px; height: 46px; font-size: 1.3rem;">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Uninterrupted Silent Generator Power</h6>
+                            <p class="text-muted small mb-0">High-capacity silent generators with automatic switch-over
+                                and dedicated electrical engineers on-site.</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="icon-box-gold flex-shrink-0" style="width: 46px; height: 46px; font-size: 1.3rem;">
+                            <i class="bi bi-palette"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Artisan Royal Mandap Designs</h6>
+                            <p class="text-muted small mb-0">Authentic Rajasthani royal carvings, fiber glass
+                                structures, fresh floral artistry, and warm ambient illumination.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="p-4 bg-light rounded-4 border border-warning border-opacity-50 shadow-sm">
+                    <h4 class="brand-font fw-bold text-center mb-4">How Our Booking Process Works</h4>
+                    <div class="d-flex flex-column gap-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="badge rounded-circle bg-dark text-warning p-3 fs-5"
+                                style="width: 48px; height: 48px;">1</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Submit Event Details</h6>
+                                <p class="text-muted small mb-0">Provide date, venue, guest count, and required decor
+                                    setup.</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="badge rounded-circle bg-dark text-warning p-3 fs-5"
+                                style="width: 48px; height: 48px;">2</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Get Transparent Quotation</h6>
+                                <p class="text-muted small mb-0">Receive itemized PDF quotation with clear breakdown and
+                                    no hidden costs.</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="badge rounded-circle bg-dark text-warning p-3 fs-5"
+                                style="width: 48px; height: 48px;">3</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Advance Confirmation &amp; Inventory Lock</h6>
+                                <p class="text-muted small mb-0">Date and all physical assets are immediately locked in
+                                    our ERP inventory.</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="badge rounded-circle bg-dark text-warning p-3 fs-5"
+                                style="width: 48px; height: 48px;">4</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">On-Time Setup &amp; Grand Execution</h6>
+                                <p class="text-muted small mb-0">Our uniform staff and supervisor deliver, install, and
+                                    support throughout the event.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5" style="background-color: #150910; color: white;">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2">Happy Families</span>
+            <h2 class="fw-bold brand-font text-white">Words From Our Clients</h2>
+            <p class="text-secondary mx-auto" style="max-width: 600px;">
+                Proud to have served Rajasthan's most prestigious weddings and grand celebrations.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 bg-dark border border-secondary border-opacity-50 h-100">
+                    <div class="text-warning mb-3">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="small text-light mb-3">
+                        "Virat Tent House handled our daughter's wedding at Sirsi Road. The German Hangar tent was
+                        completely waterproof and the floral mandap looked straight out of a royal palace! Extremely
+                        professional team."
+                    </p>
+                    <h6 class="fw-bold mb-0 text-warning">Rupesh Kumar Verma</h6>
+                    <small class="text-secondary">Owner &bull; Kurki Bazar </small>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 bg-dark border border-secondary border-opacity-50 h-100">
+                    <div class="text-warning mb-3">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="small text-light mb-3">
+                        "We booked their Maharaja seating and truss lighting for a 700-guest reception. Everything was
+                        delivered on time and the supervisor stayed till the end of the ceremony. Superb reliability!"
+                    </p>
+                    <h6 class="fw-bold mb-0 text-warning">Amar Nath Verma</h6>
+                    <small class="text-secondary">Owner &bull; Kurki Bazar</small>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 bg-dark border border-secondary border-opacity-50 h-100">
+                    <div class="text-warning mb-3">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="small text-light mb-3">
+                        "Great quotation process! They gave us a detailed PDF quotation within an hour, and everything
+                        matched the bill without sudden surprises. Highly recommended for any event!"
+                    </p>
+                    <h6 class="fw-bold mb-0 text-warning">Pooja &amp; Aman Agarwal</h6>
+                    <small class="text-secondary">Wedding Couple &bull; Ambedkar Nagar</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call To Action -->
+<section class="py-5 text-center text-white position-relative"
+    style="background: linear-gradient(135deg, #7c1020 0%, #47060f 100%);">
+    <div class="container py-4">
+        <h2 class="display-6 fw-bold brand-font mb-3">Ready to Plan Your Next Grand Event?</h2>
+        <p class="lead mb-4 opacity-90 mx-auto" style="max-width: 680px;">
+            Speak directly with our event infrastructure consultants or request a custom quote online today.
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'bookings:enquiry_create' %}"
+                class="btn btn-vth-gold btn-lg px-5 py-3 rounded-pill fw-bold">
+                <i class="bi bi-pencil-square me-2"></i> Get a Free Quote
+            </a>
+            <a href="tel:{{ brand.phone_number }}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill">
+                <i class="bi bi-telephone-fill me-2"></i> Call Us: {{ brand.phone_number }}
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

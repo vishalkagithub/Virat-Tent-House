@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}ERP Dashboard | {{ brand.business_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-2 col-md-3 admin-sidebar py-3 px-2 d-none d-md-block">
+            <div class="px-3 pb-3 mb-3 border-bottom border-secondary">
+                <div class="text-uppercase small fw-bold text-secondary mb-1">Signed in as</div>
+                <div class="text-white fw-bold text-truncate">{{ user.get_full_name|default:user.username }}</div>
+                <span class="badge bg-warning text-dark small mt-1">{{ user.get_role_display }}</span>
+            </div>
+
+            <nav class="nav flex-column">
+                <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'core:dashboard' %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a class="nav-link {% if 'enquir' in request.path %}active{% endif %}" href="{% url 'bookings:enquiry_list' %}">
+                    <i class="bi bi-chat-left-dots"></i> Enquiries
+                </a>
+                <a class="nav-link {% if 'booking' in request.path and 'calendar' not in request.path %}active{% endif %}" href="{% url 'bookings:booking_list' %}">
+                    <i class="bi bi-calendar-event"></i> Bookings
+                </a>
+                <a class="nav-link {% if 'calendar' in request.path %}active{% endif %}" href="{% url 'bookings:calendar' %}">
+                    <i class="bi bi-calendar3"></i> Event Calendar
+                </a>
+                <a class="nav-link {% if 'inventory' in request.path %}active{% endif %}" href="{% url 'inventory:inventory_list' %}">
+                    <i class="bi bi-boxes"></i> Inventory
+                </a>
+                <a class="nav-link {% if 'quotation' in request.path %}active{% endif %}" href="{% url 'finance:quotation_list' %}">
+                    <i class="bi bi-file-earmark-text"></i> Quotations
+                </a>
+                <a class="nav-link {% if 'payment' in request.path %}active{% endif %}" href="{% url 'finance:payment_list' %}">
+                    <i class="bi bi-cash-stack"></i> Payments
+                </a>
+                <a class="nav-link {% if 'expense' in request.path %}active{% endif %}" href="{% url 'finance:expense_list' %}">
+                    <i class="bi bi-wallet2"></i> Expenses
+                </a>
+                <a class="nav-link {% if 'staff' in request.path %}active{% endif %}" href="{% url 'accounts:staff_list' %}">
+                    <i class="bi bi-people"></i> Staff
+                </a>
+                <a class="nav-link {% if 'report' in request.path %}active{% endif %}" href="{% url 'core:reports' %}">
+                    <i class="bi bi-graph-up"></i> Reports & Profit
+                </a>
+                <a class="nav-link {% if 'notification' in request.path %}active{% endif %}" href="{% url 'core:notifications' %}">
+                    <i class="bi bi-bell"></i> Notifications
+                    {% if unread_notifications_count > 0 %}
+                        <span class="badge bg-danger ms-auto">{{ unread_notifications_count }}</span>
+                    {% endif %}
+                </a>
+                {% if user.is_owner or user.is_super_admin %}
+                <a class="nav-link {% if 'brand' in request.path %}active{% endif %}" href="{% url 'core:brand_settings' %}">
+                    <i class="bi bi-sliders"></i> Brand Settings
+                </a>
+                {% endif %}
+                <hr class="border-secondary my-2">
+                <a class="nav-link text-warning" href="/admin/" target="_blank">
+                    <i class="bi bi-shield-lock"></i> Django Admin
+                </a>
+            </nav>
+        </div>
+
+        <!-- Mobile Navigation Dropdown for Small Screens -->
+        <div class="col-12 d-md-none bg-dark py-2 px-3 mb-3">
+            <button class="btn btn-outline-warning btn-sm w-100 d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#mobileErpNav">
+                <span><i class="bi bi-grid-fill me-2"></i> ERP Menu</span>
+                <i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="collapse mt-2" id="mobileErpNav">
+                <div class="list-group list-group-flush bg-dark">
+                    <a class="list-group-item bg-dark text-light" href="{% url 'core:dashboard' %}"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+                    <a class="list-group-item bg-dark text-light" href="{% url 'bookings:enquiry_list' %}"><i class="bi bi-chat-left-dots me-2"></i> Enquiries</a>
+                    <a class="list-group-item bg-dark text-light" href="{% url 'bookings:booking_list' %}"><i class="bi bi-calendar-event me-2"></i> Bookings</a>
+                    <a class="list-group-item bg-dark text-light" href="{% url 'bookings:calendar' %}"><i class="bi bi-calendar3 me-2"></i> Event Calendar</a>
+                    <a class="list-group-item bg-dark text-light" href="{% url 'inventory:inventory_list' %}"><i class="bi bi-boxes me-2"></i> Inventory</a>
+                    <a class="list-group-item bg-dark text-light" href="{% url 'finance:quotation_list' %}"><i class="bi bi-file-earmark-text me-2"></i> Quotations</a>
+                    <a class="list-group-item bg-dark text-light" href="{% url 'finance:payment_list' %}"><i class="bi bi-cash-stack me-2"></i> Payments</a>
+                    <a class="list-group-item bg-dark text-light" href="{% url 'finance:expense_list' %}"><i class="bi bi-wallet2 me-2"></i> Expenses</a>
+                    <a class="list-group-item bg-dark text-light" href="{% url 'accounts:staff_list' %}"><i class="bi bi-people me-2"></i> Staff</a>
+                    <a class="list-group-item bg-dark text-light" href="{% url 'core:reports' %}"><i class="bi bi-graph-up me-2"></i> Reports</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Content Area -->
+        <div class="col-lg-10 col-md-9 py-4 px-md-4">
+            {% block dashboard_content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Record Return: {{ dispatch.item.name }} | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="mb-4 pb-2 border-bottom">
+    <h3 class="fw-bold mb-1">Process Event Return: {{ dispatch.item.name }}</h3>
+    <p class="text-muted small mb-0">Booking {{ dispatch.booking.booking_id }} &bull; Total Issued: <strong>{{ dispatch.issued_quantity }} {{ dispatch.item.unit }}</strong></p>
+</div>
+
+<div class="card border-0 shadow-sm max-w-lg">
+    <div class="card-body p-4">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold text-success">Good Condition Quantity Returned</label>
+                    {{ form.returned_quantity }}
+                    <small class="text-muted">Ready for warehouse reuse</small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold text-danger">Damaged Quantity</label>
+                    {{ form.damaged_quantity }}
+                    <small class="text-muted">Items needing welding/repair</small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold text-warning">Missing Quantity</label>
+                    {{ form.missing_quantity }}
+                    <small class="text-muted">Items not retrieved from venue</small>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label small fw-semibold">Notes / Damage Observations</label>
+                    {{ form.notes }}
+                </div>
+
+                <div class="col-12 pt-3">
+                    <button type="submit" class="btn btn-success px-4 rounded-pill">
+                        <i class="bi bi-check-circle me-1"></i> Confirm Return &amp; Update Inventory
+                    </button>
+                    <a href="{% url 'inventory:booking_dispatch_manage' dispatch.booking.id %}" class="btn btn-outline-secondary ms-2 rounded-pill">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

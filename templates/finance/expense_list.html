@@ -1,0 +1,58 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Expenses | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h3 class="fw-bold mb-1">Business Operational Expenses</h3>
+        <p class="text-muted small mb-0">Track transport, labour, decoration materials, genset fuel, and warehouse upkeep.</p>
+    </div>
+    <a href="{% url 'finance:expense_create' %}" class="btn btn-vth-maroon btn-sm">
+        <i class="bi bi-plus-lg me-1"></i> Add Expense
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 small">
+                <thead class="table-light">
+                    <tr>
+                        <th>Expense Title</th>
+                        <th>Category</th>
+                        <th>Amount (₹)</th>
+                        <th>Date</th>
+                        <th>Linked Event Booking</th>
+                        <th>Added By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for exp in expenses %}
+                    <tr>
+                        <td class="fw-bold">{{ exp.title }}</td>
+                        <td><span class="badge bg-light text-dark border">{{ exp.get_category_display }}</span></td>
+                        <td class="fw-bold text-danger">₹{{ exp.amount|floatformat:2 }}</td>
+                        <td>{{ exp.expense_date|date:"d M Y" }}</td>
+                        <td>
+                            {% if exp.related_booking %}
+                                <a href="{% url 'bookings:booking_detail' exp.related_booking.id %}" class="text-decoration-none">
+                                    {{ exp.related_booking.booking_id }}
+                                </a>
+                            {% else %}
+                                <span class="text-muted">General Operations</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ exp.added_by.first_name|default:"Admin" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">No expenses recorded yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

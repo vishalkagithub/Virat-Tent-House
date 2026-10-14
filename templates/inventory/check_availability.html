@@ -1,0 +1,129 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Real-Time Inventory Availability Check | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="mb-4 pb-2 border-bottom">
+    <h3 class="fw-bold mb-1">Dynamic Date Availability Calculator</h3>
+    <p class="text-muted small mb-0">Cross-verifies warehouse stock against all overlapping confirmed bookings to prevent double-booking.</p>
+</div>
+
+<div class="row g-4">
+    <!-- Calculator Form -->
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h6 class="fw-bold mb-0"><i class="bi bi-calculator text-warning me-2"></i> Availability Query</h6>
+            </div>
+            <div class="card-body p-4">
+                <form method="get">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Select Inventory Asset</label>
+                        {{ form.item }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Event Start Date</label>
+                        {{ form.start_date }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Event End Date (Optional)</label>
+                        {{ form.end_date }}
+                        <small class="text-muted">Leave blank for single-day event</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-semibold">Requested Quantity to Reserve</label>
+                        {{ form.requested_quantity }}
+                    </div>
+
+                    <button type="submit" class="btn btn-vth-maroon w-100 rounded-pill py-2">
+                        <i class="bi bi-shield-check me-1"></i> Calculate Availability
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculation Results & Warning Panel -->
+    <div class="col-lg-7">
+        {% if result %}
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0">Calculation Result: {{ result.item_name }}</h6>
+                <span class="badge bg-light text-dark">{{ result.start_date|date:"d M Y" }}{% if result.end_date != result.start_date %} to {{ result.end_date|date:"d M Y" }}{% endif %}</span>
+            </div>
+            <div class="card-body p-4">
+                {% if not result.is_available %}
+                <div class="alert alert-danger d-flex align-items-center gap-3 mb-4 shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-octagon-fill fs-1 text-danger"></i>
+                    <div>
+                        <h5 class="alert-heading fw-bold mb-1">STOCK SHORTAGE WARNING!</h5>
+                        <p class="mb-0">
+                            Requested <strong>{{ result.requested_quantity }} {{ result.unit }}</strong>, but only <strong>{{ result.available_for_date }} {{ result.unit }}</strong> are available for this date window.
+                            <strong>Shortage: {{ result.shortage }} {{ result.unit }}</strong>. Do NOT confirm without sourcing additional equipment.
+                        </p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-success d-flex align-items-center gap-3 mb-4 shadow-sm" role="alert">
+                    <i class="bi bi-check-circle-fill fs-1 text-success"></i>
+                    <div>
+                        <h5 class="alert-heading fw-bold mb-1">INVENTORY AVAILABLE &check;</h5>
+                        <p class="mb-0">
+                            Full requested quantity of <strong>{{ result.requested_quantity }} {{ result.unit }}</strong> is available to reserve safely for this date range.
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Detailed Calculation Breakdown Table -->
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <tbody>
+                            <tr>
+                                <th class="table-light text-muted w-50">Total Physical Stock Owned</th>
+                                <td class="fw-bold">{{ result.total_stock }} {{ result.unit }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-light text-muted">Damaged or In Repair</th>
+                                <td class="text-danger">&minus; {{ result.damaged_or_maintenance }} {{ result.unit }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-light text-muted">Usable Ready Stock</th>
+                                <td class="fw-semibold">{{ result.usable_stock }} {{ result.unit }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-light text-muted">Already Reserved by Overlapping Events</th>
+                                <td class="text-warning fw-bold">&minus; {{ result.booked_quantity }} {{ result.unit }}</td>
+                            </tr>
+                            <tr class="table-light">
+                                <th class="fw-bold">Net Available for this Date Window</th>
+                                <td class="fw-bold text-success fs-5">{{ result.available_for_date }} {{ result.unit }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-light text-muted">Requested Quantity</th>
+                                <td class="fw-bold text-primary fs-5">{{ result.requested_quantity }} {{ result.unit }}</td>
+                            </tr>
+                            {% if result.shortage > 0 %}
+                            <tr class="table-danger">
+                                <th class="fw-bold text-danger">Equipment Shortage</th>
+                                <td class="fw-bold text-danger fs-5">&minus; {{ result.shortage }} {{ result.unit }}</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="card border-0 shadow-sm h-100 d-flex align-items-center justify-content-center p-5 text-center text-muted">
+            <i class="bi bi-shield-check fs-1 text-warning mb-2"></i>
+            <h5>Select an equipment asset and dates on the left.</h5>
+            <p class="small mb-0">The ERP will verify overlapping bookings and compute exact availability.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

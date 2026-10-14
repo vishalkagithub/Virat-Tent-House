@@ -1,0 +1,80 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Brand &amp; Business Configuration | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="mb-4 pb-2 border-bottom">
+    <h3 class="fw-bold mb-1">Brand &amp; Contact Configuration</h3>
+    <p class="text-muted small mb-0">Update your business name, contact numbers, address, and maps location without editing any code.</p>
+</div>
+
+<div class="card border-0 shadow-sm max-w-lg">
+    <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Business Name</label>
+                    <input type="text" name="business_name" class="form-control" value="{{ config.business_name }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Tagline</label>
+                    <input type="text" name="tagline" class="form-control" value="{{ config.tagline }}">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Phone Number</label>
+                    <input type="text" name="phone_number" class="form-control" value="{{ config.phone_number }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">WhatsApp Number (e.g. 919453402167)</label>
+                    <input type="text" name="whatsapp_number" class="form-control" value="{{ config.whatsapp_number }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Email Address</label>
+                    <input type="email" name="email" class="form-control" value="{{ config.email }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Working Hours</label>
+                    <input type="text" name="working_hours" class="form-control" value="{{ config.working_hours }}">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Business Address</label>
+                    <textarea name="address" class="form-control" rows="2">{{ config.address }}</textarea>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Google Maps URL</label>
+                    <input type="url" name="google_maps_url" class="form-control" value="{{ config.google_maps_url }}">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Google Maps Embed URL</label>
+                    <textarea name="google_maps_embed" class="form-control" rows="2">{{ config.google_maps_embed }}</textarea>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Facebook URL</label>
+                    <input type="url" name="facebook_url" class="form-control" value="{{ config.facebook_url }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Instagram URL</label>
+                    <input type="url" name="instagram_url" class="form-control" value="{{ config.instagram_url }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">YouTube URL</label>
+                    <input type="url" name="youtube_url" class="form-control" value="{{ config.youtube_url }}">
+                </div>
+
+                <div class="col-12 pt-3">
+                    <button type="submit" class="btn btn-vth-maroon px-4 rounded-pill">
+                        <i class="bi bi-save me-1"></i> Save Brand Configuration
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}All-Inclusive Wedding &amp; Event Packages | {{ brand.business_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-dark text-white text-center" style="background: linear-gradient(135deg, #18090d 0%, #290d16 100%);">
+    <div class="container py-4">
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2">Curated Event Bundles</span>
+        <h1 class="display-5 fw-bold brand-font">Wedding &amp; Event Packages</h1>
+        <p class="lead text-secondary mx-auto" style="max-width: 650px;">
+            Comprehensive packages combining tents, mandap artistry, illumination, furniture, and power backup for a hassle-free experience.
+        </p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-4">
+        {% for package in packages %}
+        <div class="col-lg-4 col-md-6">
+            <div class="vth-card h-100 d-flex flex-column p-4 vth-card-header-accent bg-white">
+                <div class="mb-3">
+                    <span class="badge bg-dark text-warning small mb-2">Signature Package</span>
+                    <h4 class="fw-bold mb-1 brand-font">{{ package.name }}</h4>
+                    <div class="text-danger fw-bold fs-3 mt-2">
+                        ₹{{ package.starting_price|floatformat:0 }}
+                        <span class="text-muted fw-normal small fs-6">/ starting</span>
+                    </div>
+                </div>
+
+                <p class="text-muted small mb-3">{{ package.description }}</p>
+
+                <h6 class="small fw-bold text-uppercase text-secondary mt-2 mb-2">Package Inclusions:</h6>
+                <ul class="list-unstyled small mb-4 flex-grow-1">
+                    {% for item in package.items.all %}
+                    <li class="mb-2 d-flex align-items-center gap-2">
+                        <i class="bi bi-check2-circle text-success fs-6"></i>
+                        <span>{{ item.service.name }} {% if item.notes %}<small class="text-muted">({{ item.notes }})</small>{% endif %}</span>
+                    </li>
+                    {% empty %}
+                    <li class="text-muted"><i class="bi bi-check2-circle text-success me-2"></i>Waterproof Tent Setup</li>
+                    <li class="text-muted"><i class="bi bi-check2-circle text-success me-2"></i>Carved Mandap &amp; Stage</li>
+                    <li class="text-muted"><i class="bi bi-check2-circle text-success me-2"></i>Banquet Chairs &amp; Sofas</li>
+                    {% endfor %}
+                </ul>
+
+                <div class="d-grid gap-2">
+                    <a href="{% url 'services:package_detail' package.slug %}" class="btn btn-vth-gold rounded-pill fw-semibold">
+                        View Complete Breakdown
+                    </a>
+                    <a href="{% url 'bookings:enquiry_create' %}" class="btn btn-outline-dark btn-sm rounded-pill">
+                        Custom Quote for this Package
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">Packages will be populated shortly.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

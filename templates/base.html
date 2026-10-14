@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ brand.business_name }}{% endblock %} | Wedding Decor & Event Infrastructure</title>
+    <meta name="description" content="{% block meta_description %}{{ brand.business_name }} - Premium wedding tents, royal mandap decoration, shamiana, pandal, and temporary event infrastructure in Ambedkar Nagar & Uttar Pradesh.{% endblock %}">
+    <meta name="keywords" content="Virat Tent House, Wedding Tent, Mandap Decoration, Shamiana, Pandal, Event Tent Rental, Ambedkar Nagar, Akbarpur, UP Tent House">
+    
+    <!-- Open Graph SEO -->
+    <meta property="og:title" content="{% block og_title %}{{ brand.business_name }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ brand.tagline }}{% endblock %}">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 & Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-dark text-light py-1 px-3 border-bottom border-secondary small">
+        <div class="container d-flex justify-content-between align-items-center flex-wrap">
+            <div class="d-flex align-items-center gap-3">
+                <span><i class="bi bi-telephone-fill text-warning me-1"></i> <a href="tel:{{ brand.phone_number }}" class="text-light text-decoration-none">{{ brand.phone_number }}</a></span>
+                <span class="d-none d-md-inline"><i class="bi bi-clock-fill text-warning me-1"></i> {{ brand.working_hours }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span class="d-none d-lg-inline text-secondary"><i class="bi bi-geo-alt-fill text-warning me-1"></i> Ambedkar Nagar, UP</span>
+                {% if user.is_authenticated %}
+                    <span class="badge bg-secondary">Role: {{ user.get_role_display|default:user.username }}</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="navbar navbar-expand-lg vth-navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand-logo" href="{% url 'core:home' %}">
+                <i class="bi bi-gem"></i>
+                <span>{{ brand.business_name }}</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'core:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'services' in request.path %}active{% endif %}" href="{% url 'services:service_list' %}">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'packages' in request.path %}active{% endif %}" href="{% url 'services:package_list' %}">Packages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'gallery' in request.path %}active{% endif %}" href="{% url 'gallery:gallery_list' %}">Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'core:about' %}">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'core:contact' %}">Contact</a>
+                    </li>
+
+                    <li class="nav-item ms-lg-2 my-2 my-lg-0">
+                        <a href="{% url 'bookings:enquiry_create' %}" class="btn btn-vth-maroon btn-sm px-3 rounded-pill">
+                            <i class="bi bi-calendar2-check me-1"></i> Get a Free Quote
+                        </a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                        {% if not user.is_customer %}
+                            <li class="nav-item ms-lg-2">
+                                <a href="{% url 'core:dashboard' %}" class="btn btn-vth-gold btn-sm px-3 rounded-pill">
+                                    <i class="bi bi-speedometer2 me-1"></i> Staff ERP
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item ms-lg-2">
+                                <a href="{% url 'accounts:customer_portal' %}" class="btn btn-outline-dark btn-sm px-3 rounded-pill">
+                                    <i class="bi bi-person-circle me-1"></i> My Bookings
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item ms-lg-2">
+                            <a href="{% url 'accounts:logout' %}" class="btn btn-link text-danger p-0 ms-2 text-decoration-none" title="Logout">
+                                <i class="bi bi-box-arrow-right fs-5"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ms-lg-2">
+                            <a href="{% url 'accounts:login' %}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Global Messages Alert Container -->
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main Content Block -->
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Floating WhatsApp Action Button -->
+    <a href="https://wa.me/{{ brand.whatsapp_number }}?text=Hello%20Virat%20Tent%20House,%20I%20would%20like%20to%20enquire%20about%20event%20tent%20and%20decoration%20services." 
+       class="whatsapp-float shadow-lg" 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       title="Chat on WhatsApp with Virat Tent House"
+       id="whatsappFloatingBtn">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <!-- Footer -->
+    <footer class="vth-footer pt-5 pb-3 mt-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="bi bi-gem text-warning fs-3"></i>
+                        <h4 class="brand-font text-white mb-0">{{ brand.business_name }}</h4>
+                    </div>
+                    <p class="small text-secondary mb-3">{{ brand.tagline }}</p>
+                    <p class="small mb-3">Trusted event infrastructure partner for weddings, royal receptions, corporate summits, and religious celebrations across Ambedkar Nagar and Eastern Uttar Pradesh.</p>
+                    <div class="d-flex gap-2">
+                        <a href="{{ brand.facebook_url }}" class="btn btn-outline-secondary btn-sm rounded-circle"><i class="bi bi-facebook"></i></a>
+                        <a href="{{ brand.instagram_url }}" class="btn btn-outline-secondary btn-sm rounded-circle"><i class="bi bi-instagram"></i></a>
+                        <a href="{{ brand.youtube_url }}" class="btn btn-outline-secondary btn-sm rounded-circle"><i class="bi bi-youtube"></i></a>
+                        <a href="https://wa.me/{{ brand.whatsapp_number }}" class="btn btn-outline-success btn-sm rounded-circle"><i class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled small d-flex flex-column gap-2">
+                        <li><a href="{% url 'core:home' %}"><i class="bi bi-chevron-right me-1 text-warning"></i> Home</a></li>
+                        <li><a href="{% url 'services:service_list' %}"><i class="bi bi-chevron-right me-1 text-warning"></i> Services</a></li>
+                        <li><a href="{% url 'services:package_list' %}"><i class="bi bi-chevron-right me-1 text-warning"></i> Packages</a></li>
+                        <li><a href="{% url 'gallery:gallery_list' %}"><i class="bi bi-chevron-right me-1 text-warning"></i> Event Gallery</a></li>
+                        <li><a href="{% url 'core:about' %}"><i class="bi bi-chevron-right me-1 text-warning"></i> About Us</a></li>
+                        <li><a href="{% url 'core:contact' %}"><i class="bi bi-chevron-right me-1 text-warning"></i> Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <h5>Our Specialties</h5>
+                    <ul class="list-unstyled small d-flex flex-column gap-2">
+                        <li><span class="text-secondary"><i class="bi bi-check-circle text-warning me-2"></i> Waterproof German Hangars</span></li>
+                        <li><span class="text-secondary"><i class="bi bi-check-circle text-warning me-2"></i> Royal Carved Mandap Sets</span></li>
+                        <li><span class="text-secondary"><i class="bi bi-check-circle text-warning me-2"></i> Theme Lighting & Trussing</span></li>
+                        <li><span class="text-secondary"><i class="bi bi-check-circle text-warning me-2"></i> Maharaja Seating & Sofas</span></li>
+                        <li><span class="text-secondary"><i class="bi bi-check-circle text-warning me-2"></i> 24/7 Silent Generator Power</span></li>
+                        <li><span class="text-secondary"><i class="bi bi-check-circle text-warning me-2"></i> Banquet Dining Setup</span></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <h5>Contact Information</h5>
+                    <p class="small mb-2"><i class="bi bi-geo-alt-fill text-warning me-2"></i> {{ brand.address }}</p>
+                    <p class="small mb-2"><i class="bi bi-telephone-fill text-warning me-2"></i> <a href="tel:{{ brand.phone_number }}" class="text-white text-decoration-none">{{ brand.phone_number }}</a></p>
+                    <p class="small mb-2"><i class="bi bi-envelope-fill text-warning me-2"></i> <a href="mailto:{{ brand.email }}" class="text-white text-decoration-none">{{ brand.email }}</a></p>
+                    <p class="small mb-3"><i class="bi bi-clock-fill text-warning me-2"></i> {{ brand.working_hours }}</p>
+                    <a href="{% url 'bookings:enquiry_create' %}" class="btn btn-vth-gold btn-sm w-100 rounded-pill">
+                        Book Your Event Today
+                    </a>
+                </div>
+            </div>
+
+            <hr class="border-secondary mt-4 mb-3">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap small text-secondary">
+                <p class="mb-0">&copy; {% now "Y" %} {{ brand.business_name }}. All rights reserved.</p>
+                <div>
+                    <span class="me-3">Crafted for Royal Celebrations</span>
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'accounts:login' %}" class="text-secondary">Staff Portal</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

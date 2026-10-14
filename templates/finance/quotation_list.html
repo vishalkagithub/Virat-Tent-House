@@ -1,0 +1,68 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Quotations | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h3 class="fw-bold mb-1">Quotations &amp; Estimates</h3>
+        <p class="text-muted small mb-0">Generate professional, itemized PDF quotations for potential clients and confirmed events.</p>
+    </div>
+    <a href="{% url 'finance:quotation_create' %}" class="btn btn-vth-maroon btn-sm">
+        <i class="bi bi-plus-lg me-1"></i> Generate Quotation
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 small">
+                <thead class="table-light">
+                    <tr>
+                        <th>Quotation #</th>
+                        <th>Client Name</th>
+                        <th>Event &amp; Venue</th>
+                        <th>Event Date</th>
+                        <th>Grand Total (₹)</th>
+                        <th>Valid Until</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for q in quotations %}
+                    <tr>
+                        <td class="fw-bold">{{ q.quotation_number }}</td>
+                        <td>{{ q.customer.name }}</td>
+                        <td>
+                            <div class="fw-semibold">{{ q.event_type }}</div>
+                            <small class="text-muted">{{ q.venue|truncatewords:4 }}</small>
+                        </td>
+                        <td>{{ q.event_date|date:"d M Y" }}</td>
+                        <td class="fw-bold text-danger">₹{{ q.grand_total|floatformat:2 }}</td>
+                        <td>{{ q.valid_until|date:"d M Y" }}</td>
+                        <td>
+                            <span class="badge {% if q.status == 'accepted' %}bg-success{% elif q.status == 'sent' %}bg-info{% else %}bg-secondary{% endif %}">
+                                {{ q.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'finance:quotation_detail' q.id %}" class="btn btn-outline-dark">View</a>
+                                <a href="{% url 'finance:quotation_download_pdf' q.id %}" class="btn btn-outline-danger" title="Download PDF">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">No quotations generated yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,270 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Booking {{ booking.booking_id }} | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap mb-4 pb-2 border-bottom">
+    <div>
+        <div class="d-flex align-items-center gap-2">
+            <h3 class="fw-bold mb-0">Booking: {{ booking.booking_id }}</h3>
+            <span class="badge {% if booking.status == 'confirmed' %}bg-success{% elif booking.status == 'in_preparation' %}bg-warning text-dark{% elif booking.status == 'completed' %}bg-primary{% else %}bg-secondary{% endif %}">
+                {{ booking.get_status_display }}
+            </span>
+        </div>
+        <p class="text-muted small mb-0">{{ booking.customer.name }} &bull; {{ booking.event_type }} on {{ booking.event_date|date:"d M Y" }}</p>
+    </div>
+    <div class="d-flex gap-2 mt-2 mt-md-0">
+        <a href="{% url 'inventory:booking_dispatch_manage' booking.id %}" class="btn btn-warning btn-sm">
+            <i class="bi bi-truck me-1"></i> Inventory Dispatch &amp; Return
+        </a>
+        <a href="{% url 'finance:payment_create' %}?booking_id={{ booking.id }}" class="btn btn-success btn-sm">
+            <i class="bi bi-cash me-1"></i> Record Payment
+        </a>
+        <a href="{% url 'finance:quotation_create' %}?booking_id={{ booking.id }}" class="btn btn-vth-maroon btn-sm">
+            <i class="bi bi-file-earmark-plus me-1"></i> Create Quotation
+        </a>
+    </div>
+</div>
+
+<!-- Financial Summary Strip -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="p-3 bg-white rounded-3 border text-center shadow-sm">
+            <span class="text-muted small">Total Event Cost</span>
+            <h4 class="fw-bold mb-0 text-dark">₹{{ booking.total_amount|floatformat:2 }}</h4>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="p-3 bg-white rounded-3 border text-center shadow-sm">
+            <span class="text-muted small">Discount Given</span>
+            <h4 class="fw-bold mb-0 text-secondary">&minus; ₹{{ booking.discount|floatformat:2 }}</h4>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="p-3 bg-white rounded-3 border text-center shadow-sm">
+            <span class="text-muted small">Total Paid Amount</span>
+            <h4 class="fw-bold mb-0 text-success">₹{{ booking.total_paid|floatformat:2 }}</h4>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="p-3 bg-white rounded-3 border text-center shadow-sm">
+            <span class="text-muted small">Remaining Balance</span>
+            <h4 class="fw-bold mb-0 text-danger">₹{{ booking.remaining_balance|floatformat:2 }}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Left Column: Details & Checklist -->
+    <div class="col-lg-7">
+        <!-- Event Overview Card -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0"><i class="bi bi-info-circle text-primary me-2"></i> Event &amp; Venue Overview</h6>
+                <form method="post" class="d-flex align-items-center gap-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="update_status" value="1">
+                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                        {% for val, label in booking.Status.choices %}
+                        <option value="{{ val }}" {% if booking.status == val %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="row g-3 small">
+                    <div class="col-6"><strong>Client:</strong> {{ booking.customer.name }}</div>
+                    <div class="col-6"><strong>Phone:</strong> <a href="tel:{{ booking.customer.phone }}">{{ booking.customer.phone }}</a></div>
+                    <div class="col-6"><strong>Event Type:</strong> {{ booking.event_type }}</div>
+                    <div class="col-6"><strong>Guest Count:</strong> {{ booking.guest_count }} Guests</div>
+                    <div class="col-6"><strong>Event Date:</strong> {{ booking.event_date|date:"l, d F Y" }}</div>
+                    <div class="col-6"><strong>Timing:</strong> {{ booking.start_time|default:"TBD" }} to {{ booking.end_time|default:"TBD" }}</div>
+                    <div class="col-12"><strong>Venue Location:</strong> {{ booking.venue }}</div>
+                    {% if booking.special_instructions %}
+                    <div class="col-12">
+                        <strong>Special Instructions:</strong>
+                        <div class="p-2 bg-light rounded mt-1">{{ booking.special_instructions }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Preparation Checklist -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0"><i class="bi bi-check2-square text-success me-2"></i> Event Preparation Checklist</h6>
+                <span class="badge bg-light text-dark">{{ checklist.count }} Tasks</span>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush small">
+                    {% for task in checklist %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="{% url 'bookings:booking_toggle_checklist' booking.id task.id %}" class="btn btn-sm p-0 text-decoration-none">
+                                {% if task.is_completed %}
+                                    <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                                {% else %}
+                                    <i class="bi bi-circle text-muted fs-5"></i>
+                                {% endif %}
+                            </a>
+                            <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% else %}fw-semibold{% endif %}">
+                                {{ task.title }}
+                            </span>
+                        </div>
+                        {% if task.is_completed and task.assigned_to %}
+                            <small class="text-muted">By {{ task.assigned_to.first_name }} ({{ task.completed_at|date:"d M h:i A" }})</small>
+                        {% endif %}
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center py-3 text-muted">No checklist items configured.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Booking Allocated Items -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0"><i class="bi bi-boxes text-warning me-2"></i> Booked Items &amp; Services Breakdown</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light small">
+                            <tr>
+                                <th>Item / Service</th>
+                                <th>Quantity</th>
+                                <th>Rate (₹)</th>
+                                <th>Total (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for item in items %}
+                            <tr>
+                                <td class="fw-semibold">{{ item.item_name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>₹{{ item.unit_price|floatformat:2 }}</td>
+                                <td class="fw-bold">₹{{ item.total_price|floatformat:2 }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">No items itemized yet. Add items below.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Add Item Accordion / Form -->
+            <div class="card-footer bg-light p-3">
+                <form action="{% url 'bookings:booking_add_item' booking.id %}" method="post" class="row g-2 align-items-center">
+                    {% csrf_token %}
+                    <div class="col-md-5">
+                        <input type="text" name="item_name" class="form-control form-control-sm" placeholder="Item/Service Name" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="quantity" class="form-control form-control-sm" placeholder="Qty" value="1" min="1" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" name="unit_price" class="form-control form-control-sm" placeholder="Unit Rate ₹" step="0.01" required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-vth-maroon btn-sm w-100">Add Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Staff Assignments & Finance Links -->
+    <div class="col-lg-5">
+        <!-- Staff Assignments -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0"><i class="bi bi-people text-info me-2"></i> Assigned Event Staff &amp; Crew</h6>
+                <span class="badge bg-light text-dark">{{ assignments.count }} Assigned</span>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush small">
+                    {% for assign in assignments %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <div>
+                            <div class="fw-bold">{{ assign.staff_member.get_full_name|default:assign.staff_member.username }}</div>
+                            <small class="text-muted">{{ assign.staff_member.phone }}</small>
+                        </div>
+                        <span class="badge bg-dark">{{ assign.role_in_event }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center py-3 text-muted">No staff assigned yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card-footer bg-light p-3">
+                <form action="{% url 'bookings:booking_add_staff' booking.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="row g-2">
+                        <div class="col-6">
+                            {{ staff_form.staff_member }}
+                        </div>
+                        <div class="col-6">
+                            {{ staff_form.role_in_event }}
+                        </div>
+                        <div class="col-12 mt-2">
+                            <button type="submit" class="btn btn-dark btn-sm w-100">Assign Staff to Event</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Payments Recorded -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0"><i class="bi bi-credit-card text-success me-2"></i> Payment Records</h6>
+                <a href="{% url 'finance:payment_create' %}?booking_id={{ booking.id }}" class="btn btn-outline-success btn-sm py-0 px-2">+ Add Payment</a>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush small">
+                    {% for pmt in payments %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <div>
+                            <div class="fw-bold text-success">₹{{ pmt.amount|floatformat:2 }}</div>
+                            <small class="text-muted">{{ pmt.payment_date|date:"d M Y" }} &bull; {{ pmt.get_payment_method_display }}</small>
+                        </div>
+                        <span class="badge bg-light text-dark">{{ pmt.transaction_id|default:"Cash" }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center py-3 text-muted">No payments recorded.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Quotations Linked -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0"><i class="bi bi-file-earmark-pdf text-danger me-2"></i> Quotations</h6>
+                <a href="{% url 'finance:quotation_create' %}?booking_id={{ booking.id }}" class="btn btn-outline-danger btn-sm py-0 px-2">+ Generate PDF</a>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush small">
+                    {% for qtn in quotations %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <div>
+                            <div class="fw-bold">{{ qtn.quotation_number }}</div>
+                            <small class="text-muted">Total: ₹{{ qtn.grand_total|floatformat:2 }} &bull; {{ qtn.get_status_display }}</small>
+                        </div>
+                        <a href="{% url 'finance:quotation_download_pdf' qtn.id %}" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-download"></i> PDF
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center py-3 text-muted">No quotations generated.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

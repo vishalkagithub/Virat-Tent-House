@@ -1,0 +1,114 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Inventory Dispatch &amp; Return #{{ booking.booking_id }} | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h3 class="fw-bold mb-1">Event Dispatch &amp; Return: {{ booking.booking_id }}</h3>
+        <p class="text-muted small mb-0">{{ booking.customer.name }} &bull; {{ booking.event_type }} at {{ booking.venue }}</p>
+    </div>
+    <a href="{% url 'bookings:booking_detail' booking.id %}" class="btn btn-outline-dark btn-sm">
+        &larr; Back to Booking
+    </a>
+</div>
+
+<div class="row g-4">
+    <!-- Active Dispatches List -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h6 class="fw-bold mb-0"><i class="bi bi-truck text-warning me-2"></i> Issued Equipment &amp; Return Status</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 small">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Issued Qty</th>
+                                <th>Returned</th>
+                                <th>Damaged</th>
+                                <th>Missing</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in dispatches %}
+                            <tr>
+                                <td class="fw-bold">{{ d.item.name }}</td>
+                                <td>{{ d.issued_quantity }} {{ d.item.unit }}</td>
+                                <td class="text-success fw-bold">{{ d.returned_quantity }}</td>
+                                <td>
+                                    {% if d.damaged_quantity > 0 %}<span class="badge bg-danger">{{ d.damaged_quantity }}</span>{% else %}0{% endif %}
+                                </td>
+                                <td>
+                                    {% if d.missing_quantity > 0 %}<span class="badge bg-warning text-dark">{{ d.missing_quantity }}</span>{% else %}0{% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge {% if d.status == 'returned' %}bg-success{% elif d.status == 'dispatched' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+                                        {{ d.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if d.status != 'returned' %}
+                                    <a href="{% url 'inventory:dispatch_process_return' d.id %}" class="btn btn-sm btn-outline-success py-0 px-2">
+                                        Record Return
+                                    </a>
+                                    {% else %}
+                                    <span class="text-muted small">&check; Completed</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">No equipment dispatched yet. Add items on the right.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dispatch New Item Form -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h6 class="fw-bold mb-0"><i class="bi bi-plus-circle text-primary me-2"></i> Dispatch Item to Venue</h6>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="add_dispatch" value="1">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Select Inventory Asset</label>
+                        {{ form.item }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Issued Quantity</label>
+                        {{ form.issued_quantity }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Dispatch Milestone Status</label>
+                        {{ form.status }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Loading Notes / Vehicle Number</label>
+                        {{ form.notes }}
+                    </div>
+
+                    <button type="submit" class="btn btn-vth-maroon w-100 rounded-pill py-2">
+                        Issue &amp; Dispatch Equipment
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

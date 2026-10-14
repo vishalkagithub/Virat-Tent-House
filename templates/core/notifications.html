@@ -1,0 +1,60 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Notifications | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h3 class="fw-bold mb-1">System &amp; Event Notifications</h3>
+        <p class="text-muted small mb-0">Stay updated on client enquiries, payments, and event preparation alerts.</p>
+    </div>
+    {% if unread_notifications_count > 0 %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="mark_all_read">
+        <button type="submit" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-check2-all me-1"></i> Mark All as Read
+        </button>
+    </form>
+    {% endif %}
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="list-group list-group-flush">
+            {% for notif in notifications %}
+            <div class="list-group-item p-3 d-flex gap-3 align-items-start {% if not notif.is_read %}bg-light border-start border-warning border-3{% endif %}">
+                <div class="icon-box-gold flex-shrink-0" style="width: 42px; height: 42px; font-size: 1.2rem;">
+                    {% if notif.notification_type == 'enquiry' %}
+                        <i class="bi bi-chat-left-dots text-warning"></i>
+                    {% elif notif.notification_type == 'payment' %}
+                        <i class="bi bi-credit-card text-success"></i>
+                    {% elif notif.notification_type == 'inventory_alert' %}
+                        <i class="bi bi-exclamation-triangle text-danger"></i>
+                    {% else %}
+                        <i class="bi bi-bell text-primary"></i>
+                    {% endif %}
+                </div>
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h6 class="mb-0 fw-bold">{{ notif.title }}</h6>
+                        <small class="text-muted">{{ notif.created_at|timesince }} ago</small>
+                    </div>
+                    <p class="mb-2 text-secondary small">{{ notif.message }}</p>
+                    {% if notif.link %}
+                        <a href="{{ notif.link }}" class="btn btn-sm btn-outline-dark py-0 px-2" style="font-size: 0.78rem;">
+                            View Details &rarr;
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="p-5 text-center text-muted">
+                <i class="bi bi-bell-slash fs-1 d-block mb-2"></i>
+                No notifications right now.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

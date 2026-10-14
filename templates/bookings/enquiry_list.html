@@ -1,0 +1,76 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Manage Enquiries | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h3 class="fw-bold mb-1">Customer Enquiries</h3>
+        <p class="text-muted small mb-0">Track leads, contact brides/grooms/organizers, and convert enquiries to bookings.</p>
+    </div>
+    <form method="get" class="d-flex gap-2">
+        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+            <option value="">All Statuses</option>
+            <option value="new" {% if status_filter == 'new' %}selected{% endif %}>New</option>
+            <option value="contacted" {% if status_filter == 'contacted' %}selected{% endif %}>Contacted</option>
+            <option value="quotation_sent" {% if status_filter == 'quotation_sent' %}selected{% endif %}>Quotation Sent</option>
+            <option value="negotiation" {% if status_filter == 'negotiation' %}selected{% endif %}>In Negotiation</option>
+            <option value="confirmed" {% if status_filter == 'confirmed' %}selected{% endif %}>Confirmed</option>
+            <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
+        </select>
+        <input type="text" name="q" class="form-control form-control-sm" placeholder="Search customer, phone..." value="{{ search }}">
+        <button type="submit" class="btn btn-dark btn-sm"><i class="bi bi-search"></i></button>
+    </form>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light small">
+                    <tr>
+                        <th>Enquiry #</th>
+                        <th>Customer Name</th>
+                        <th>Phone</th>
+                        <th>Event Type</th>
+                        <th>Event Date</th>
+                        <th>Venue</th>
+                        <th>Guests</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {% for enq in enquiries %}
+                    <tr>
+                        <td class="fw-bold text-dark">{{ enq.enquiry_number }}</td>
+                        <td>{{ enq.customer_name }}</td>
+                        <td>
+                            <a href="tel:{{ enq.phone }}" class="text-decoration-none text-dark">{{ enq.phone }}</a>
+                        </td>
+                        <td><span class="badge bg-light text-dark border">{{ enq.get_event_type_display }}</span></td>
+                        <td>{{ enq.event_date|date:"d M Y" }}</td>
+                        <td>{{ enq.venue|truncatewords:4 }}</td>
+                        <td>{{ enq.guest_count }}</td>
+                        <td>
+                            <span class="badge {% if enq.status == 'new' %}bg-warning text-dark{% elif enq.status == 'confirmed' %}bg-success{% elif enq.status == 'cancelled' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                {{ enq.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'bookings:enquiry_detail' enq.id %}" class="btn btn-outline-primary btn-sm py-0 px-2">
+                                Details
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center py-5 text-muted">No enquiries found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

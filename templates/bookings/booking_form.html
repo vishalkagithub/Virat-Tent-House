@@ -1,0 +1,108 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}{{ title }} | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="mb-4 pb-2 border-bottom">
+    <h3 class="fw-bold mb-1">{{ title }}</h3>
+    <p class="text-muted small mb-0">Record a new confirmed or prospective event booking directly into the ERP.</p>
+</div>
+
+<div class="card border-0 shadow-sm max-w-lg">
+    <div class="card-body p-4">
+        <form method="post">
+            {% csrf_token %}
+
+            <h6 class="fw-bold text-uppercase text-secondary mb-3"><i class="bi bi-person-circle me-1"></i> Customer Information</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Customer Full Name <span class="text-danger">*</span></label>
+                    {{ form.customer_name }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Contact Mobile Phone <span class="text-danger">*</span></label>
+                    {{ form.customer_phone }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Email Address</label>
+                    {{ form.customer_email }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Customer Address</label>
+                    {{ form.customer_address }}
+                </div>
+            </div>
+
+            <h6 class="fw-bold text-uppercase text-secondary mb-3"><i class="bi bi-calendar-event me-1"></i> Event Information</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Event Type</label>
+                    {{ form.event_type }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Event Date (Start) <span class="text-danger">*</span></label>
+                    {{ form.event_date }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">End Date (Multi-day)</label>
+                    {{ form.end_date }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Start Time</label>
+                    {{ form.start_time }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">End Time</label>
+                    {{ form.end_time }}
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label small fw-semibold">Venue / Address <span class="text-danger">*</span></label>
+                    {{ form.venue }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Guest Count</label>
+                    {{ form.guest_count }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Selected Package (Optional)</label>
+                    {{ form.package }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Booking Status</label>
+                    {{ form.status }}
+                </div>
+            </div>
+
+            <h6 class="fw-bold text-uppercase text-secondary mb-3"><i class="bi bi-currency-rupee me-1"></i> Financials</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Total Amount (₹)</label>
+                    {{ form.total_amount }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Discount (₹)</label>
+                    {{ form.discount }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Initial Advance Amount (₹)</label>
+                    {{ form.advance_amount }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label small fw-semibold">Special Instructions</label>
+                    {{ form.special_instructions }}
+                </div>
+            </div>
+
+            <div class="pt-3">
+                <button type="submit" class="btn btn-vth-maroon px-4 rounded-pill">
+                    Save Booking &amp; Initialize Checklist
+                </button>
+                <a href="{% url 'bookings:booking_list' %}" class="btn btn-outline-secondary ms-2 rounded-pill">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

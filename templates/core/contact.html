@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact &amp; Location | {{ brand.business_name }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="py-5 bg-dark text-white text-center"
+    style="background: linear-gradient(135deg, #18090d 0%, #290d16 100%);">
+    <div class="container py-4">
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2">Get in Touch</span>
+        <h1 class="display-5 fw-bold brand-font">Contact &amp; Location</h1>
+        <p class="lead text-secondary mx-auto" style="max-width: 650px;">
+            Visit our office &amp; warehouse at Kurki Bazar, Akbarpur or connect directly via Phone, WhatsApp, or Email for wedding and event inquiries.
+        </p>
+    </div>
+</section>
+
+<!-- Quick Action Strip -->
+<section class="py-4 bg-light border-bottom">
+    <div class="container">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 p-3 bg-white">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-box-gold flex-shrink-0" style="width: 52px; height: 52px; font-size: 1.4rem;">
+                            <i class="bi bi-telephone-fill"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted small d-block">Call Us Directly</span>
+                            <a href="tel:{{ brand.phone_number }}" class="fw-bold text-dark text-decoration-none fs-5">
+                                {{ brand.phone_number }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 p-3 bg-white">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-box-gold flex-shrink-0" style="width: 52px; height: 52px; font-size: 1.4rem; background: #e8f5e9; color: #2e7d32;">
+                            <i class="bi bi-whatsapp"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted small d-block">Instant WhatsApp</span>
+                            <a href="https://wa.me/{{ brand.whatsapp_number }}?text=Hello%20Virat%20Tent%20House,%20I%20would%20like%20to%20enquire%20about%20event%20tent%20and%20decoration%20services." 
+                               target="_blank" rel="noopener noreferrer" class="fw-bold text-success text-decoration-none fs-5">
+                                +91 9453402167
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 p-3 bg-white">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-box-gold flex-shrink-0" style="width: 52px; height: 52px; font-size: 1.4rem; background: #e3f2fd; color: #1565c0;">
+                            <i class="bi bi-envelope-fill"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted small d-block">Email Support</span>
+                            <a href="mailto:{{ brand.email }}" class="fw-bold text-primary text-decoration-none text-truncate d-block" style="max-width: 200px;">
+                                {{ brand.email }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Details & Map Section -->
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="row g-5">
+            <!-- Contact Info Box -->
+            <div class="col-lg-5">
+                <div class="vth-card p-4 h-100 bg-light d-flex flex-column justify-content-between">
+                    <div>
+                        <h4 class="brand-font fw-bold mb-4">Office &amp; Godown Details</h4>
+
+                        <!-- Address -->
+                        <div class="d-flex align-items-start gap-3 mb-4">
+                            <div class="icon-box-gold flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Office &amp; Godown Address</h6>
+                                <p class="text-muted small mb-0">{{ brand.address }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="d-flex align-items-start gap-3 mb-4">
+                            <div class="icon-box-gold flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Phone Number</h6>
+                                <p class="text-muted small mb-0">
+                                    <a href="tel:{{ brand.phone_number }}" class="text-decoration-none text-dark fw-bold">
+                                        {{ brand.phone_number }}
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp -->
+                        <div class="d-flex align-items-start gap-3 mb-4">
+                            <div class="icon-box-gold flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                                <i class="bi bi-whatsapp"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Direct WhatsApp Desk</h6>
+                                <p class="text-muted small mb-0">
+                                    <a href="https://wa.me/{{ brand.whatsapp_number }}?text=Hello%20Virat%20Tent%20House,%20I%20would%20like%20to%20enquire%20about%20event%20tent%20and%20decoration%20services." 
+                                       target="_blank" rel="noopener noreferrer" class="text-success text-decoration-none fw-bold">
+                                        +91 9453402167 (Chat on WhatsApp)
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="d-flex align-items-start gap-3 mb-4">
+                            <div class="icon-box-gold flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                                <i class="bi bi-envelope-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Email Inquiries</h6>
+                                <p class="text-muted small mb-0">
+                                    <a href="mailto:{{ brand.email }}" class="text-decoration-none text-dark fw-semibold">
+                                        {{ brand.email }}
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Working Hours -->
+                        <div class="d-flex align-items-start gap-3 mb-4">
+                            <div class="icon-box-gold flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                                <i class="bi bi-clock-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Operational Hours</h6>
+                                <p class="text-muted small mb-0">{{ brand.working_hours }}</p>
+                                <span class="badge bg-success-subtle text-success small mt-1">Open All 7 Days for Bookings</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-top mt-3">
+                        <a href="{% url 'bookings:enquiry_create' %}" class="btn btn-vth-maroon w-100 rounded-pill py-2 shadow-sm">
+                            <i class="bi bi-calendar2-check me-2"></i> Submit Event Booking Enquiry
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map View -->
+            <div class="col-lg-7">
+                <div class="vth-card p-0 h-100 overflow-hidden shadow-sm d-flex flex-column border">
+                    <div class="p-3 bg-white d-flex justify-content-between align-items-center flex-wrap gap-2 border-bottom">
+                        <div>
+                            <h5 class="fw-bold mb-0">
+                                <i class="bi bi-geo-alt-fill text-danger me-2"></i> Find Us on Google Maps
+                            </h5>
+                            <small class="text-muted">Kurki Bazar, Akbarpur-Baskhari road, Ambedkar Nagar, UP</small>
+                        </div>
+                        <a href="{{ brand.google_maps_url }}" target="_blank" rel="noopener noreferrer" 
+                           class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-semibold">
+                            <i class="bi bi-box-arrow-up-right me-1"></i> Open in Maps App
+                        </a>
+                    </div>
+
+                    <div style="flex-grow: 1; min-height: 420px; width: 100%;">
+                        <iframe src="{{ brand.google_maps_embed }}" width="100%" height="100%" style="border:0; min-height: 420px;"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+
+                    <div class="p-3 bg-light border-top d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div class="small text-secondary">
+                            <i class="bi bi-pin-map-fill text-danger me-1"></i> <strong>Location:</strong> {{ brand.address }}
+                        </div>
+                        <a href="{{ brand.google_maps_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-vth-maroon rounded-pill px-3">
+                            <i class="bi bi-cursor-fill me-1"></i> Get Driving Directions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Callout Banner -->
+<section class="py-5" style="background: linear-gradient(135deg, #42101a 0%, #290d16 100%);">
+    <div class="container text-center text-white py-2">
+        <h3 class="brand-font fw-bold mb-3">Planning an Event in Ambedkar Nagar or Nearby?</h3>
+        <p class="text-light opacity-75 mx-auto mb-4" style="max-width: 650px;">
+            From royal wedding shamianas to waterproof German hangars, grand lighting, sound, and furniture — Virat Tent House delivers flawless event infrastructure.
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="tel:{{ brand.phone_number }}" class="btn btn-vth-gold rounded-pill px-4 py-2">
+                <i class="bi bi-telephone-fill me-2"></i> Call {{ brand.phone_number }}
+            </a>
+            <a href="https://wa.me/{{ brand.whatsapp_number }}?text=Hello%20Virat%20Tent%20House,%20I%20would%20like%20to%20enquire%20about%20event%20tent%20and%20decoration%20services." 
+               target="_blank" rel="noopener noreferrer" class="btn btn-outline-light rounded-pill px-4 py-2">
+                <i class="bi bi-whatsapp me-2"></i> Chat on WhatsApp
+            </a>
+            <a href="{% url 'bookings:enquiry_create' %}" class="btn btn-light rounded-pill px-4 py-2 text-dark fw-bold">
+                <i class="bi bi-file-earmark-text me-2"></i> Request a Quote
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

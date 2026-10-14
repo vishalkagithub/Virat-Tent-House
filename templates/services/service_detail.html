@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ service.name }} | {{ brand.business_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'services:service_list' %}">Services</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ service.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <div class="vth-card p-4 p-md-5 mb-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-box-gold mb-0">
+                        <i class="bi {{ service.category.icon|default:'bi-gem' }}"></i>
+                    </div>
+                    <div>
+                        <span class="badge badge-vth-maroon mb-1">{{ service.category.name }}</span>
+                        <h2 class="brand-font fw-bold mb-0">{{ service.name }}</h2>
+                    </div>
+                </div>
+
+                <div class="my-4 p-3 rounded-3 bg-light border d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <span class="text-muted small">Pricing Structure:</span>
+                        <h4 class="text-danger fw-bold mb-0">{{ service.price_display }}</h4>
+                    </div>
+                    <span class="badge bg-dark py-2 px-3"><i class="bi bi-shield-check text-warning me-1"></i> Quality Inspected</span>
+                </div>
+
+                <h5 class="fw-bold mt-4 mb-3">Service Description &amp; Specifications</h5>
+                <p class="text-secondary leading-relaxed" style="font-size: 1.05rem; white-space: pre-line;">
+                    {{ service.description }}
+                </p>
+
+                <hr class="my-4">
+
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'bookings:enquiry_create' %}" class="btn btn-vth-maroon btn-lg px-4 rounded-pill">
+                        <i class="bi bi-calendar2-check me-2"></i> Book for Your Event
+                    </a>
+                    <a href="https://wa.me/{{ brand.whatsapp_number }}?text=Hello%20Virat%20Tent%20House,%20I%20am%20interested%20in%20{{ service.name|urlencode }}." 
+                       target="_blank" 
+                       class="btn btn-outline-success btn-lg px-4 rounded-pill">
+                        <i class="bi bi-whatsapp me-2"></i> Enquire on WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="vth-card p-4 bg-light mb-4">
+                <h5 class="fw-bold mb-3"><i class="bi bi-telephone-inbound-fill text-warning me-2"></i> Need Consultation?</h5>
+                <p class="small text-muted mb-3">Speak directly with our technical event supervisor for site inspection and dimensional measurements.</p>
+                <div class="fw-bold mb-1">{{ brand.phone_number }}</div>
+                <small class="text-muted d-block mb-3">{{ brand.working_hours }}</small>
+                <a href="tel:{{ brand.phone_number }}" class="btn btn-dark btn-sm w-100 rounded-pill">Call Us Now</a>
+            </div>
+
+            <!-- Related Services -->
+            <div class="vth-card p-4">
+                <h6 class="fw-bold mb-3">Other Services in {{ service.category.name }}</h6>
+                <div class="list-group list-group-flush small">
+                    {% for rel in related_services %}
+                    <a href="{% url 'services:service_detail' rel.slug %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
+                        <span>{{ rel.name }}</span>
+                        <i class="bi bi-chevron-right text-muted"></i>
+                    </a>
+                    {% empty %}
+                    <p class="text-muted small mb-0">No other services in this category.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

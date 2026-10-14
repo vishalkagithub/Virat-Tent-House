@@ -1,0 +1,101 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Inventory Management | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h3 class="fw-bold mb-1">Physical Asset &amp; Inventory Management</h3>
+        <p class="text-muted small mb-0">Track total stock, warehouse ready stock, damaged items, and ongoing event reservations.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'inventory:check_availability' %}" class="btn btn-warning btn-sm">
+            <i class="bi bi-shield-check me-1"></i> Check Date Availability
+        </a>
+        <a href="{% url 'inventory:inventory_create' %}" class="btn btn-vth-maroon btn-sm">
+            <i class="bi bi-plus-lg me-1"></i> Add Asset Item
+        </a>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-3">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"i" %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <input type="text" name="q" class="form-control form-control-sm" placeholder="Search by item name, SKU..." value="{{ search }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-dark btn-sm w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light small">
+                    <tr>
+                        <th>Asset Name</th>
+                        <th>Category</th>
+                        <th>SKU</th>
+                        <th>Total Stock</th>
+                        <th>Ready Stock</th>
+                        <th>Damaged</th>
+                        <th>In Repair</th>
+                        <th>Rental Rate</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {% for item in items %}
+                    <tr>
+                        <td class="fw-bold">{{ item.name }}</td>
+                        <td>{{ item.category.name }}</td>
+                        <td><code>{{ item.sku }}</code></td>
+                        <td><strong>{{ item.total_quantity }}</strong> {{ item.unit }}</td>
+                        <td class="text-success fw-bold">{{ item.ready_stock }} {{ item.unit }}</td>
+                        <td>
+                            {% if item.damaged_quantity > 0 %}
+                                <span class="badge bg-danger">{{ item.damaged_quantity }}</span>
+                            {% else %}
+                                <span class="text-muted">0</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.under_maintenance > 0 %}
+                                <span class="badge bg-warning text-dark">{{ item.under_maintenance }}</span>
+                            {% else %}
+                                <span class="text-muted">0</span>
+                            {% endif %}
+                        </td>
+                        <td>₹{{ item.rental_price|floatformat:2 }} / {{ item.unit }}</td>
+                        <td>
+                            {% if item.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'inventory:inventory_edit' item.id %}" class="btn btn-outline-primary btn-sm py-0 px-2">Edit</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center py-5 text-muted">No inventory assets found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

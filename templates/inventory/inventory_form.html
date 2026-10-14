@@ -1,0 +1,82 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}{{ title }} | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="mb-4 pb-2 border-bottom">
+    <h3 class="fw-bold mb-1">{{ title }}</h3>
+    <p class="text-muted small mb-0">Record or modify tent equipment, chairs, fabrics, lights, or genset assets.</p>
+</div>
+
+<div class="card border-0 shadow-sm max-w-lg">
+    <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Inventory Category</label>
+                    {{ form.category }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Item Name</label>
+                    {{ form.name }}
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Asset SKU (Unique)</label>
+                    {{ form.sku }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Unit of Measure (e.g. Pieces, Sets)</label>
+                    {{ form.unit }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Total Physical Quantity Owned</label>
+                    {{ form.total_quantity }}
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Damaged Count</label>
+                    {{ form.damaged_quantity }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Under Maintenance / Repair</label>
+                    {{ form.under_maintenance }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Rental Rate (₹) per Event</label>
+                    {{ form.rental_price }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Purchase Price (₹)</label>
+                    {{ form.purchase_price }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Item Image</label>
+                    {{ form.image }}
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label small fw-semibold">Item Description / Storage Location</label>
+                    {{ form.description }}
+                </div>
+
+                <div class="col-12">
+                    <div class="form-check">
+                        {{ form.is_active }}
+                        <label class="form-check-label small fw-semibold">Asset Active</label>
+                    </div>
+                </div>
+
+                <div class="col-12 pt-3">
+                    <button type="submit" class="btn btn-vth-maroon px-4 rounded-pill">
+                        Save Asset
+                    </button>
+                    <a href="{% url 'inventory:inventory_list' %}" class="btn btn-outline-secondary ms-2 rounded-pill">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

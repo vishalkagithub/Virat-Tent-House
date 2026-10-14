@@ -1,0 +1,53 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}{{ title }} | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="mb-4 pb-2 border-bottom">
+    <h3 class="fw-bold mb-1">{{ title }}</h3>
+    <p class="text-muted small mb-0">Record advance deposit or final settlement towards an event booking.</p>
+</div>
+
+<div class="card border-0 shadow-sm max-w-lg">
+    <div class="card-body p-4">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Select Event Booking</label>
+                    {{ form.booking }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Payment Amount (₹)</label>
+                    {{ form.amount }}
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Payment Date</label>
+                    {{ form.payment_date }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Payment Method</label>
+                    {{ form.payment_method }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Transaction Reference / UTR #</label>
+                    {{ form.transaction_id }}
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label small fw-semibold">Notes / Receipt details</label>
+                    {{ form.notes }}
+                </div>
+
+                <div class="col-12 pt-3">
+                    <button type="submit" class="btn btn-success px-4 rounded-pill">
+                        <i class="bi bi-check-circle me-1"></i> Confirm &amp; Save Payment
+                    </button>
+                    <a href="{% url 'finance:payment_list' %}" class="btn btn-outline-secondary ms-2 rounded-pill">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

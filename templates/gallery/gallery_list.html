@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Event &amp; Wedding Decoration Gallery | {{ brand.business_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-dark text-white text-center" style="background: linear-gradient(135deg, #18090d 0%, #290d16 100%);">
+    <div class="container py-4">
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2">Our Work</span>
+        <h1 class="display-5 fw-bold brand-font">Wedding &amp; Event Gallery</h1>
+        <p class="lead text-secondary mx-auto" style="max-width: 650px;">
+            A glimpse into the royal setups, majestic mandaps, and evening illuminations executed by Virat Tent House across Rajasthan.
+        </p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <!-- Category Filter Tabs -->
+    <div class="d-flex justify-content-center gap-2 flex-wrap mb-5">
+        <a href="{% url 'gallery:gallery_list' %}" class="btn btn-sm rounded-pill px-3 {% if not selected_category %}btn-dark{% else %}btn-outline-dark{% endif %}">
+            All Photos
+        </a>
+        {% for cat in categories %}
+        <a href="{% url 'gallery:gallery_list' %}?category={{ cat.slug }}" class="btn btn-sm rounded-pill px-3 {% if selected_category == cat.slug %}btn-dark{% else %}btn-outline-dark{% endif %}">
+            {{ cat.name }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="row g-4">
+        {% for img in images %}
+        <div class="col-lg-4 col-md-6">
+            <div class="vth-card h-100 overflow-hidden shadow-sm">
+                {% if img.image %}
+                    <img src="{{ img.image.url }}" class="card-img-top" alt="{{ img.title }}" style="height: 260px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center text-muted" style="height: 260px;">
+                        <i class="bi bi-image fs-1"></i>
+                    </div>
+                {% endif %}
+                <div class="p-3">
+                    <span class="badge bg-light text-dark border small mb-1">{{ img.category.name }}</span>
+                    <h6 class="fw-bold mb-1">{{ img.title }}</h6>
+                    {% if img.description %}
+                        <p class="small text-muted mb-0">{{ img.description }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">Gallery photos will be displayed once loaded.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{% url 'bookings:enquiry_create' %}" class="btn btn-vth-maroon btn-lg px-4 rounded-pill">
+            <i class="bi bi-calendar2-heart me-2"></i> Book a Setup Like This for Your Event
+        </a>
+    </div>
+</div>
+{% endblock %}

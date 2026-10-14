@@ -1,0 +1,128 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Enquiry {{ enquiry.enquiry_number }} | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h3 class="fw-bold mb-1">Enquiry: {{ enquiry.enquiry_number }}</h3>
+        <p class="text-muted small mb-0">Submitted on {{ enquiry.created_at|date:"d M Y, h:i A" }}</p>
+    </div>
+    <div class="d-flex gap-2">
+        {% if enquiry.status != 'confirmed' %}
+        <a href="{% url 'bookings:convert_enquiry_to_booking' enquiry.id %}" class="btn btn-success btn-sm">
+            <i class="bi bi-arrow-right-circle me-1"></i> Convert to Booking
+        </a>
+        {% endif %}
+        <a href="{% url 'finance:quotation_create' %}?enquiry_id={{ enquiry.id }}" class="btn btn-vth-maroon btn-sm">
+            <i class="bi bi-file-earmark-plus me-1"></i> Create Quotation
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0">Customer &amp; Event Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Client Name</small>
+                        <h6 class="fw-bold">{{ enquiry.customer_name }}</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Contact Phone</small>
+                        <h6 class="fw-bold">
+                            <a href="tel:{{ enquiry.phone }}">{{ enquiry.phone }}</a>
+                            {% if enquiry.whatsapp_number %}
+                            <a href="https://wa.me/{{ enquiry.whatsapp_number }}" target="_blank" class="ms-2 text-success"><i class="bi bi-whatsapp"></i></a>
+                            {% endif %}
+                        </h6>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Email</small>
+                        <h6 class="fw-semibold">{{ enquiry.email|default:"Not provided" }}</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Event Type</small>
+                        <h6 class="fw-bold text-danger">{{ enquiry.get_event_type_display }}</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Event Date</small>
+                        <h6 class="fw-bold">{{ enquiry.event_date|date:"l, d F Y" }}</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Time Window</small>
+                        <h6 class="fw-semibold">
+                            {% if enquiry.start_time %}{{ enquiry.start_time|time:"h:i A" }}{% endif %}
+                            {% if enquiry.end_time %} to {{ enquiry.end_time|time:"h:i A" }}{% endif %}
+                            {% if not enquiry.start_time and not enquiry.end_time %}Full Day Setup{% endif %}
+                        </h6>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Guest Count</small>
+                        <h6 class="fw-bold">{{ enquiry.guest_count }} Guests</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Estimated Budget</small>
+                        <h6 class="fw-bold text-success">{% if enquiry.budget %}₹{{ enquiry.budget|floatformat:2 }}{% else %}Not specified{% endif %}</h6>
+                    </div>
+                    <div class="col-12">
+                        <small class="text-muted d-block">Venue / Locality</small>
+                        <p class="mb-0 fw-semibold">{{ enquiry.venue }}</p>
+                    </div>
+                    <div class="col-12">
+                        <small class="text-muted d-block">Required Services</small>
+                        <p class="mb-0 p-3 bg-light rounded-3 border small">{{ enquiry.required_services|default:"None listed" }}</p>
+                    </div>
+                    {% if enquiry.additional_requirements %}
+                    <div class="col-12">
+                        <small class="text-muted d-block">Additional Requirements</small>
+                        <p class="mb-0 p-3 bg-light rounded-3 border small">{{ enquiry.additional_requirements }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0">Update Status</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="update_status" value="1">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Current Pipeline Status</label>
+                        <select name="status" class="form-select">
+                            {% for val, label in enquiry.Status.choices %}
+                            <option value="{{ val }}" {% if enquiry.status == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-vth-maroon btn-sm w-100 rounded-pill">
+                        Update Status
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm bg-light">
+            <div class="card-body">
+                <h6 class="fw-bold mb-2"><i class="bi bi-whatsapp text-success me-1"></i> WhatsApp Quick Message</h6>
+                <p class="small text-muted mb-3">Send a pre-formatted greeting to the client directly.</p>
+                <a href="https://wa.me/{{ enquiry.whatsapp_number }}?text=Hello%20{{ enquiry.customer_name|urlencode }},%20regarding%20your%20enquiry%20{{ enquiry.enquiry_number }}%20with%20Virat%20Tent%20House." 
+                   target="_blank" 
+                   class="btn btn-outline-success btn-sm w-100 rounded-pill">
+                    Message Client on WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

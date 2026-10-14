@@ -1,0 +1,76 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}{{ title }} | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="mb-4 pb-2 border-bottom">
+    <h3 class="fw-bold mb-1">{{ title }}</h3>
+    <p class="text-muted small mb-0">Generate a new itemized estimate for an event.</p>
+</div>
+
+<div class="card border-0 shadow-sm max-w-lg">
+    <div class="card-body p-4">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Customer</label>
+                    {{ form.customer }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Linked Booking (Optional)</label>
+                    {{ form.booking }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Quotation Title</label>
+                    {{ form.title }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold">Event Type</label>
+                    {{ form.event_type }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold">Event Date</label>
+                    {{ form.event_date }}
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label small fw-semibold">Venue Location</label>
+                    {{ form.venue }}
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Discount (₹)</label>
+                    {{ form.discount }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Tax / GST Rate (%)</label>
+                    {{ form.tax_rate }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Valid Until Date</label>
+                    {{ form.valid_until }}
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label small fw-semibold">Terms &amp; Conditions</label>
+                    {{ form.terms_and_conditions }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Status</label>
+                    {{ form.status }}
+                </div>
+
+                <div class="col-12 pt-3">
+                    <button type="submit" class="btn btn-vth-maroon px-4 rounded-pill">
+                        Generate Quotation &amp; Add Items
+                    </button>
+                    <a href="{% url 'finance:quotation_list' %}" class="btn btn-outline-secondary ms-2 rounded-pill">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

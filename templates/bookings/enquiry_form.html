@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Request a Free Quote | {{ brand.business_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-dark text-white text-center" style="background: linear-gradient(135deg, #18090d 0%, #290d16 100%);">
+    <div class="container py-4">
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2">Instant Quotation</span>
+        <h1 class="display-5 fw-bold brand-font">Book Your Event &amp; Get a Free Quote</h1>
+        <p class="lead text-secondary mx-auto" style="max-width: 650px;">
+            Fill in your event requirements below. Our event setup specialists will calculate requirements and share an itemized quotation within 2 hours.
+        </p>
+    </div>
+</section>
+
+<div class="container py-5 my-2">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="vth-card p-4 p-md-5 shadow-sm">
+                <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom">
+                    <div class="icon-box-gold mb-0">
+                        <i class="bi bi-calendar2-heart"></i>
+                    </div>
+                    <div>
+                        <h4 class="brand-font fw-bold mb-0">Event Booking Enquiry Form</h4>
+                        <small class="text-muted">No obligation &bull; Quick response on WhatsApp &bull; Best price guarantee</small>
+                    </div>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <h6 class="fw-bold text-uppercase text-secondary mb-3"><i class="bi bi-person-fill me-1"></i> Customer Contact Details</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Your Full Name <span class="text-danger">*</span></label>
+                            {{ form.customer_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Mobile Phone Number <span class="text-danger">*</span></label>
+                            {{ form.phone }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">WhatsApp Number (For instant quote PDF)</label>
+                            {{ form.whatsapp_number }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Email Address</label>
+                            {{ form.email }}
+                        </div>
+                    </div>
+
+                    <h6 class="fw-bold text-uppercase text-secondary mb-3"><i class="bi bi-calendar-event me-1"></i> Event Specifications</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label small fw-semibold">Event Type <span class="text-danger">*</span></label>
+                            {{ form.event_type }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-semibold">Event Date <span class="text-danger">*</span></label>
+                            {{ form.event_date }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-semibold">Estimated Guests <span class="text-danger">*</span></label>
+                            {{ form.guest_count }}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Start Time</label>
+                            {{ form.start_time }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">End Time</label>
+                            {{ form.end_time }}
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold">Venue / Locality &amp; Address <span class="text-danger">*</span></label>
+                            {{ form.venue }}
+                        </div>
+                    </div>
+
+                    <h6 class="fw-bold text-uppercase text-secondary mb-3"><i class="bi bi-boxes me-1"></i> Requirements &amp; Budget</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold">Required Services &amp; Infrastructure</label>
+                            {{ form.required_services }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Approximate Budget (₹)</label>
+                            {{ form.budget }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Theme Colors or Special Notes</label>
+                            {{ form.additional_requirements }}
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-light rounded-3 d-flex align-items-center gap-3 mb-4 border">
+                        <i class="bi bi-shield-check text-success fs-3"></i>
+                        <small class="text-secondary">
+                            By submitting, your enquiry ID will be generated immediately and registered into the Virat Tent House ERP system. We respect your privacy and will never share your number.
+                        </small>
+                    </div>
+
+                    <button type="submit" class="btn btn-vth-maroon btn-lg w-100 py-3 rounded-pill fw-semibold shadow">
+                        <i class="bi bi-send-fill me-2"></i> Submit Enquiry &amp; Generate Quote ID
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

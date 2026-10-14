@@ -1,0 +1,112 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Financial &amp; Performance Reports | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h3 class="fw-bold mb-1">Financial &amp; Performance Reports</h3>
+        <p class="text-muted small mb-0">Year-to-date business summary &bull; Generated on {{ today|date:"d M Y" }}</p>
+    </div>
+    <div>
+        <button onclick="window.print()" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-printer me-1"></i> Print / Save Report
+        </button>
+    </div>
+</div>
+
+<!-- YTD Overview Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="admin-kpi-card kpi-success">
+            <span class="text-muted small fw-semibold text-uppercase">Total Revenue (YTD)</span>
+            <h2 class="fw-bold text-success mb-0 mt-2">₹{{ total_revenue_ytd|floatformat:2 }}</h2>
+            <small class="text-muted">Total payments received this year</small>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="admin-kpi-card kpi-maroon">
+            <span class="text-muted small fw-semibold text-uppercase">Total Expenses (YTD)</span>
+            <h2 class="fw-bold text-danger mb-0 mt-2">₹{{ total_expense_ytd|floatformat:2 }}</h2>
+            <small class="text-muted">Operational expenses recorded</small>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="admin-kpi-card kpi-warning">
+            <span class="text-muted small fw-semibold text-uppercase">Net Estimated Profit</span>
+            <h2 class="fw-bold text-primary mb-0 mt-2">₹{{ net_profit_ytd|floatformat:2 }}</h2>
+            <small class="text-muted">Net profit margin</small>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Expenses Breakdown by Category -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white py-3">
+                <h6 class="fw-bold mb-0"><i class="bi bi-pie-chart text-danger me-2"></i> Expense Breakdown by Category</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light small">
+                            <tr>
+                                <th>Category</th>
+                                <th class="text-end">Total Amount (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for exp in expenses_by_category %}
+                            <tr>
+                                <td class="text-capitalize fw-semibold">{{ exp.category }}</td>
+                                <td class="text-end fw-bold text-danger">₹{{ exp.total|floatformat:2 }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" class="text-center py-4 text-muted">No expense data recorded.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payments by Method -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white py-3">
+                <h6 class="fw-bold mb-0"><i class="bi bi-credit-card text-success me-2"></i> Collections by Payment Method</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light small">
+                            <tr>
+                                <th>Payment Method</th>
+                                <th class="text-end">Total Collected (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for pmt in payments_by_method %}
+                            <tr>
+                                <td class="text-capitalize fw-semibold">{{ pmt.payment_method }}</td>
+                                <td class="text-end fw-bold text-success">₹{{ pmt.total|floatformat:2 }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" class="text-center py-4 text-muted">No payment records yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

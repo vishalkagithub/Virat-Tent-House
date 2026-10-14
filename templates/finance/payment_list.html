@@ -1,0 +1,54 @@
+{% extends 'core/dashboard_base.html' %}
+
+{% block title %}Payments | {{ brand.business_name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h3 class="fw-bold mb-1">Payment Transactions</h3>
+        <p class="text-muted small mb-0">Record and monitor client advances, balance clearings, UPI references, and cash receipts.</p>
+    </div>
+    <a href="{% url 'finance:payment_create' %}" class="btn btn-vth-maroon btn-sm">
+        <i class="bi bi-plus-lg me-1"></i> Record Payment
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 small">
+                <thead class="table-light">
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Client</th>
+                        <th>Amount Paid (₹)</th>
+                        <th>Date</th>
+                        <th>Payment Method</th>
+                        <th>Reference / UTR #</th>
+                        <th>Remaining Event Balance</th>
+                        <th>Recorded By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                    <tr>
+                        <td class="fw-bold">{{ p.booking.booking_id }}</td>
+                        <td>{{ p.booking.customer.name }}</td>
+                        <td class="fw-bold text-success fs-6">₹{{ p.amount|floatformat:2 }}</td>
+                        <td>{{ p.payment_date|date:"d M Y" }}</td>
+                        <td><span class="badge bg-light text-dark border">{{ p.get_payment_method_display }}</span></td>
+                        <td><code>{{ p.transaction_id|default:"Cash Voucher" }}</code></td>
+                        <td class="fw-bold text-danger">₹{{ p.booking.remaining_balance|floatformat:2 }}</td>
+                        <td>{{ p.recorded_by.first_name|default:"Admin" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">No payment transactions recorded.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

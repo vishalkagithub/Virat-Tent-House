@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ package.name }} | {{ brand.business_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'services:package_list' %}">Packages</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ package.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <div class="vth-card p-4 p-md-5 mb-4 vth-card-header-accent">
+                <span class="badge bg-warning text-dark px-3 py-1 rounded-pill mb-2">Curated Event Package</span>
+                <h2 class="brand-font fw-bold mb-2">{{ package.name }}</h2>
+                <div class="text-danger fw-bold fs-3 mb-4">
+                    Starting from ₹{{ package.starting_price|floatformat:0 }}
+                </div>
+
+                <h5 class="fw-bold mb-3">Package Overview</h5>
+                <p class="text-secondary leading-relaxed mb-4" style="font-size: 1.05rem;">
+                    {{ package.description }}
+                </p>
+
+                <h5 class="fw-bold mb-3"><i class="bi bi-stars text-warning me-2"></i> All Included Services &amp; Inclusions</h5>
+                <div class="list-group mb-4">
+                    {% for item in package.items.all %}
+                    <div class="list-group-item p-3 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">{{ item.service.name }}</h6>
+                                <small class="text-muted">{{ item.service.category.name }}</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-light text-dark">{{ item.notes|default:"Standard Included" }}</span>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted small">Contact us for custom package specifications.</p>
+                    {% endfor %}
+                </div>
+
+                {% if package.terms %}
+                <h6 class="fw-bold mb-2 text-secondary">Package Terms &amp; Scope of Work</h6>
+                <div class="p-3 bg-light rounded-3 small text-muted mb-4">
+                    {{ package.terms }}
+                </div>
+                {% endif %}
+
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'bookings:enquiry_create' %}" class="btn btn-vth-maroon btn-lg px-4 rounded-pill">
+                        <i class="bi bi-calendar2-check me-2"></i> Book This Package
+                    </a>
+                    <a href="https://wa.me/{{ brand.whatsapp_number }}?text=Hello%20Virat%20Tent%20House,%20I%20am%20interested%20in%20the%20{{ package.name|urlencode }}." 
+                       target="_blank" 
+                       class="btn btn-outline-success btn-lg px-4 rounded-pill">
+                        <i class="bi bi-whatsapp me-2"></i> Enquire on WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="vth-card p-4 bg-light mb-4">
+                <h5 class="fw-bold mb-3"><i class="bi bi-sliders text-warning me-2"></i> Customize This Package?</h5>
+                <p class="small text-muted mb-3">All packages can be fine-tuned to match your guest count, venue dimensions, and specific color themes.</p>
+                <a href="{% url 'bookings:enquiry_create' %}" class="btn btn-dark btn-sm w-100 rounded-pill">Request Custom Quotation</a>
+            </div>
+
+            <!-- Other Packages -->
+            <div class="vth-card p-4">
+                <h6 class="fw-bold mb-3">Explore Other Packages</h6>
+                <div class="list-group list-group-flush small">
+                    {% for op in other_packages %}
+                    <a href="{% url 'services:package_detail' op.slug %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
+                        <span>{{ op.name }}</span>
+                        <span class="text-muted">₹{{ op.starting_price|floatformat:0 }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
